@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Apple and Android full-screen capability -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>2D Animation app</title>
+    
+</head>
+<body>
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <div class="left-panel">
+            <div class="app-title">Draw Motion</div>
+            <div id="savedProjects" style="position: absolute; top: 60px; left: 20px; width: 90%; max-height: 300px; overflow-y: auto;"></div>
+            <div class="sort-options">
+                <button class="sort-btn active">Sort by name</button>
+                <button class="sort-btn">Sort by date</button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="animation-preview">
+                <div class="papers-stack">
+                    <div class="paper-sheet"></div>
+                    <div class="paper2-sheet"></div>
+                    <div class="paper3-sheet"></div>
+                </div>
+                <div class="hole-punches">
+                    <div class="hole"></div>
+                    <div class="hole"></div>
+                    <div class="hole"></div>
+                </div>
+                <div class="pencil"></div>
+            </div>
+            <button class="new-project-btn" id="newProjectBtn">New project</button>
+        </div>
+    </div>
+<!-- Rotate warning for portrait mode -->
+<div id="rotateDevice" style="display: none;">
+    <p>Please rotate your device to landscape mode for the best experience.</p>
+  </div>
+  
+    <!-- Project Setup Modal -->
+    <div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-row">
+                <label>New project name:</label>
+                <input type="text" id="projectName" value="Untitled">
+            </div>
+            <div class="modal-row">
+                <label>Frames per second:</label>
+                <select id="fps">
+                    <option value="12" selected>12</option>
+                    <option value="24">24</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Camera size:</label>
+                <div class="size-inputs">
+                    <input type="number" id="width" value="1280">
+                    <span>x</span>
+                    <input type="number" id="height" value="720">
+                </div>
+            </div>
+            <div class="modal-row">
+                <label>+ Margins:</label>
+                <div class="size-inputs">
+                    <input type="number" id="marginX" value="0">
+                    <span>x</span>
+                    <input type="number" id="marginY" value="0">
+                </div>
+            </div>
+            <div class="modal-row">
+                <label>= Canvas size:</label>
+                <div class="size-inputs">
+                    <span id="canvasWidth" class="canvas-size-display">1280</span>
+                    <span>x</span>
+                    <span id="canvasHeight" class="canvas-size-display">720</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancelBtn">Cancel</button>
+                <button class="modal-btn ok-btn" id="okBtn">Okay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animation Interface -->
+    <div class="animation-interface" id="animationInterface">
+        <div class="top-toolbar">
+            <div class="toolbar-section">
+                <button class="toolbar-btn"id="homeBtn"  title="Home">
+                    <i data-lucide="home"></i>
+                  </button>
+                  <button class="toolbar-btn" id="saveBtn"title="Save">
+                    <i data-lucide="save"></i>
+                  </button>
+                  <button class="toolbar-btn" id="undoBtn" title="Undo">
+                    <i class="fas fa-undo"></i>
+                  </button>
+                  <button class="toolbar-btn" id="redoBtn" title="Redo">
+                    <i class="fas fa-redo"></i>
+                  </button>
+
+                  
+            </div>
+           
+            <div class="frame-controls">
+                <div class="frame-controls">
+                    <button class="toolbar-btn" id="jumpStartBtn">◀ Start: 1</button>
+                    <button class="toolbar-btn" id="jumpEndBtn">▶ End: 1</button>
+                    <button class="toolbar-btn" id="deleteDrawingBtn"> Delete Drawing</button>
+                  </div>
+                  
+                
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="tools-panel">
+                <div class="tool-btn active" data-tool="brush"><i class="fa fa-paint-brush"></i> </div>
+                  <div class="tool-btn" data-tool="eraser"><i class="fa fa-eraser"></i></div>
+                  <div class="tool-btn text" data-tool="text" title="Text"> <i class="fas fa-font"></i> </div>
+                <div class="tool-btn" data-tool="line"><i class="fa fa-slash"></i></div>
+                <div class="tool-btn" data-tool="fill"><i class="fa fa-fill-drip"></i></div>
+                <div class="tool-btn" data-tool="rectangle"><i class="fa fa-vector-square"></i></div>
+                <div class="tool-btn eyedropper" data-tool="eyedropper" title="Eyedropper"><i class="fas fa-eye-dropper"></i></div>
+                <div class="tool-btn" data-tool="circle"><i class="fa fa-circle"></i></div>
+            </div>
+
+            <div class="canvas-container">
+                <div style="position: relative; width: 100%;">
+                  <canvas id="animationCanvas" class="animation-canvas" width="1280" height="720"></canvas>
+                  <canvas id="previewCanvas" class="animation-canvas" width="1280" height="720" style="position:absolute; top:0; left:0; pointer-events:none;"></canvas>
+                </div>
+                <div class="frame-info">Frame: <span id="currentFrame">1</span> / <span id="totalFrames">1</span></div>
+              </div>
+              
+
+            <div class="properties-panel">
+                <div class="property-group">
+                    <h3>Brush Settings</h3>
+                    <div class="property-row">
+                        <label>Size:</label>
+                        <span id="brushSizeValue">5px</span>
+                    </div>
+                    <input type="range" class="property-slider" id="brushSize" min="1" max="50" value="5">
+                    
+                    <div class="property-row">
+                        <label>Opacity:</label>
+                        <span id="opacityValue">100%</span>
+                    </div>
+                    <input type="range" class="property-slider" id="opacity" min="0" max="100" value="100">
+                    
+                    <div class="property-row">
+                        <label>Flow:</label>
+                        <span id="flowValue">100%</span>
+                    </div>
+                    <input type="range" class="property-slider" id="flow" min="0" max="100" value="100">
+                    
+                    <div class="property-row">
+                        <label>Spacing:</label>
+                        <span id="spacingValue">1%</span>
+                    </div>
+                    <input type="range" class="property-slider" id="spacing" min="1" max="100" value="1">
+                    
+                    <div class="property-row">
+                        <label>Smoothing:</label>
+                        <span id="smoothingValue">6%</span>
+                    </div>
+                    <input type="range" class="property-slider" id="smoothing" min="0" max="100" value="6">
+                </div>
+
+                <div class="property-group">
+                    <h3>Color</h3>
+                    <input type="color" class="color-picker" id="brushColor" value="#000000">
+                    <div style="margin-top: 10px;">
+                        <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #000; border-radius: 4px; cursor: pointer;" data-color="#000000"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #fff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" data-color="#ffffff"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #f00; border-radius: 4px; cursor: pointer;" data-color="#ff0000"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #0f0; border-radius: 4px; cursor: pointer;" data-color="#00ff00"></div>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #00f; border-radius: 4px; cursor: pointer;" data-color="#0000ff"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #ff0; border-radius: 4px; cursor: pointer;" data-color="#ffff00"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #f0f; border-radius: 4px; cursor: pointer;" data-color="#ff00ff"></div>
+                            <div class="color-swatch" style="width: 30px; height: 30px; background: #0ff; border-radius: 4px; cursor: pointer;" data-color="#00ffff"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-group">
+                    <h3>Layers</h3>
+                    <div style="background: #2c3e50; padding: 10px; border-radius: 4px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                            <input type="checkbox" checked style="margin-right: 5px;">
+                            <span style="font-size: 12px;">Layer 1</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <input type="checkbox" checked style="margin-right: 5px;">
+                            <span style="font-size: 12px;">Background</span>
+                        </div>
+                        <button id="onionToggle" class="tool-btn" title="Toggle Onion Skin">🧅 Onion Skin</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="frameTimeline" class="frame-timeline" style="margin-top: 20px;">
+            <div class="timeline" style="padding: 10px; background: #2c3e50; border-radius: 8px;">
+              
+            <div id="frameTimeline" class="frame-timeline">
+                <div class="timeline">
+                    <div class="timeline-controls" style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                          <button class="play-btn" id="playBtn" style="font-size: 20px;">▶</button>
+                          <button class="toolbar-btn" id="addFrameBtn" style="margin-left: 10px;">+ Add Frame</button>
+                        </div>
+                        <div style="color: #bdc3c7; font-size: 12px;">
+                          Zoom: <span id="zoomLevel">100%</span> |
+                          Frame: <span id="currentFrame">0</span> / <span id="totalFrames">10</span>
+                        </div>
+                      </div>
+                    <div class="timeline-track" id="timelineTrack" style="margin-top: 10px; display: flex; overflow-x: auto;">
+                        <div class="frame-cell active" data-frame="1">1</div>
+                <div class="frame-cell" data-frame="2">2</div>
+                <div class="frame-cell" data-frame="3">3</div>
+                <div class="frame-cell" data-frame="4">4</div>
+                <div class="frame-cell" data-frame="5">5</div>
+                <div class="frame-cell" data-frame="6">6</div>
+                <div class="frame-cell" data-frame="7">7</div>
+                <div class="frame-cell" data-frame="8">8</div>
+                <div class="frame-cell" data-frame="9">9</div>
+                <div class="frame-cell" data-frame="10">10</div>
+            </div>
+        </div>
+    </div>
+    </div>
+  
+    <script>
+        lucide.createIcons();
+        </script>
+  <script src="script.js"></script>
+</body>
+</html>  
