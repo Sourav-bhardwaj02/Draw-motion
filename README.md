@@ -4,6 +4,7 @@
 
 ![Draw Motion Logo](assets/logo.png)
 
+<img src="https://twemoji.maxcdn.com/v/latest/72x72/1f58c.png" alt="paintbrush" width="20"/> Brush Tool
 
 *Create stunning 2D animations with ease - right in your browser!*
 
@@ -25,7 +26,7 @@
 ### 🖌️ **Professional Drawing Tools**
 | Tool | Description | Hotkey |
 |------|-------------|---------|
-| 🖌️ **Brush** | Smooth drawing with pressure sensitivity | `B` |
+| 🧽 Brush Tool **Brush** | Smooth drawing with pressure sensitivity | `B` |
 | 🧽 **Eraser** | Clean removal with variable sizes | `E` |
 | 📝 **Text** | Add typography to your animations | `T` |
 | 📏 **Line** | Perfect straight lines | `L` |
