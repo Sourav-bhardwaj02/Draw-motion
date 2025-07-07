@@ -26,7 +26,7 @@
 ### 🖌️ **Professional Drawing Tools**
 | Tool | Description | Hotkey |
 |------|-------------|---------|
-| 🧽 Brush Tool **Brush** | Smooth drawing with pressure sensitivity | `B` |
+| 🖌️ **Brush** | Smooth drawing with pressure sensitivity | `B` |
 | 🧽 **Eraser** | Clean removal with variable sizes | `E` |
 | 📝 **Text** | Add typography to your animations | `T` |
 | 📏 **Line** | Perfect straight lines | `L` |
