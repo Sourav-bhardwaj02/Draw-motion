@@ -4,7 +4,7 @@
 
 ![Draw Motion Logo](assets/logo.png)
 
-<img src="https://twemoji.maxcdn.com/v/latest/72x72/1f58c.png" alt="paintbrush" width="20"/> Brush Tool
+
 
 *Create stunning 2D animations with ease - right in your browser!*
 
